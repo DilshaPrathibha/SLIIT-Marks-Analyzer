@@ -7,7 +7,7 @@ import io
 
 st.set_page_config(page_title="Marks Analyzer", layout="wide")
 
-st.title("📊 Student Marks Analyzer")
+st.title("📊 SLIIT Marks Analyzer")
 
 uploaded_file = st.file_uploader("📎 Upload PDF File", type="pdf")
 if not uploaded_file:
