@@ -165,8 +165,8 @@ if uploaded_file:
                             <tr><td>🎯 Scaled CA</td><td><span style='color: green;'>{ca_scaled:.1f}</span> / {int(ca_weight * 100)}</td></tr>
                             <tr><td>🎓 Rank</td><td><span style='color: green;'>{rank}</span> / {total}</td></tr>
                             <tr><td>📊 Percentile</td><td>Top <span style='color: green;'>{percentile:.2f}%</span></td></tr>
-                            <tr><td>🎯 Final Mark</td><td>Between <span style='color: green;'>{min_total:.2f}</span> - <span style='color: green;'>{max_total:.2f}</span></td></tr>
                             <tr><td>🧪 Final Exam Marks</td><td>Between <span style='color: green;'>{exam_min:.1f}</span> - <span style='color: green;'>{exam_max:.1f}</span></td></tr>
+                            <tr><td>🎯 Total Mark</td><td>Between <span style='color: green;'>{min_total:.2f}</span> - <span style='color: green;'>{max_total:.2f}</span></td></tr>
                             <tr><td>📌 Performance</td><td>{perf}</td></tr>
                         </tbody>
                     </table>
@@ -189,11 +189,18 @@ if uploaded_file:
             axs[0, 0].text(i, val + 1, str(val), ha='center', fontsize=10)
         axs[0, 0].grid(axis="y", linestyle="--", alpha=0.5)
 
-        grade_counts = df_sorted["Grade"].value_counts().sort_index()
-        axs[0, 1].bar(grade_counts.index, grade_counts.values, color="mediumseagreen")
-        axs[0, 1].set_title("Grade Distribution", fontsize=14)
-        axs[0, 1].set_xlabel("Grade")
-        axs[0, 1].set_ylabel("No. of Students")
+        # Grade Distribution - axs[0, 1]
+        custom_grade_order = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "E", "F", "N/A"]
+        
+        grade_counts = df_sorted["Grade"].value_counts()
+        grade_counts = grade_counts.reindex(custom_grade_order, fill_value=0)
+        
+        axs[0, 1].bar(grade_counts.index, grade_counts.values, color="coral")
+        axs[0, 1].set_title("Grade Distribution")
+        axs[0, 1].set_xlabel("Grades")
+        axs[0, 1].set_ylabel("Number of Students")
+        axs[0, 1].tick_params(axis='x', rotation=45)
+        
         axs[0, 1].grid(axis="y", linestyle="--", alpha=0.5)
 
         status_counts = df_sorted["Status"].value_counts()
@@ -219,7 +226,7 @@ if uploaded_file:
         num_fail = df_sorted[df_sorted["Status"] != "Pass"].shape[0]
 
         st.markdown(f"""
-        ### 📋 Class Summary
+        ### 📋 Summary
         - 👥 Total Students: <span style='color: green'>{total_students}</span>  
         - 📚 Average CA: <span style='color: green'>{class_avg:.2f}</span> (Raw Avg: <span style='color: green'>{class_avg / ca_weight:.2f}%</span>)  
         - ✅ Passed: <span style='color: green'>{num_pass}</span>  
