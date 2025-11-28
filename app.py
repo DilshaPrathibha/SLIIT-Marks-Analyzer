@@ -22,8 +22,34 @@ st.markdown("""
             margin-bottom: 1.5rem;
         }
 
-        /* Responsive: Remove large padding on mobile */
-        @media (max-width: 991px) {
+        /* Responsive breakpoints for smoother transitions */
+        
+        /* Large tablets and small desktops (1200px and below) */
+        @media (max-width: 1200px) {
+            .main {
+                padding-left: 200px !important;
+                padding-right: 200px !important;
+            }
+        }
+        
+        /* Medium tablets (992px and below) */
+        @media (max-width: 992px) {
+            .main {
+                padding-left: 100px !important;
+                padding-right: 100px !important;
+            }
+        }
+        
+        /* Small tablets (768px and below) */
+        @media (max-width: 768px) {
+            .main {
+                padding-left: 50px !important;
+                padding-right: 50px !important;
+            }
+        }
+        
+        /* Mobile devices (576px and below) */
+        @media (max-width: 576px) {
             .main {
                 padding-left: 20px !important;
                 padding-right: 20px !important;
