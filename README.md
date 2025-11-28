@@ -1,3 +1,25 @@
+---
+title: SLIIT Marks Analyzer
+emoji: 📘
+colorFrom: blue
+colorTo: green
+sdk: streamlit
+sdk_version: "1.29.0"
+app_file: app.py
+pinned: false
+---
+
+---
+title: SLIIT Marks Analyzer
+emoji: 📘
+colorFrom: blue
+colorTo: green
+sdk: streamlit
+sdk_version: "1.29.0"
+app_file: app.py
+pinned: false
+---
+
 # 📘 SLIIT Marks Analyzer
 
 A comprehensive student performance analysis tool designed specifically for SLIIT (Sri Lanka Institute of Information Technology) exam results. This application extracts student data from PDF exam reports and provides detailed insights into individual and class performance metrics.
