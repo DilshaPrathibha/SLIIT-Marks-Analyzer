@@ -105,13 +105,33 @@ if uploaded_file:
         sixty_forty = {"IT1010", "IT1050", "IT1090", "IT2020", "IT2060", "IT2050"}
         fifty_fifty = {"IT1020", "IT1030", "IT1040", "IT1060", "IT1080", "IT1100", "IT2030", "IT2040"}
 
+        # Initialize session state for custom weight if not exists
+        if 'custom_ca_weight' not in st.session_state:
+            st.session_state.custom_ca_weight = 40
+
         if module_code in sixty_forty:
             ca_weight, final_weight = 0.4, 0.6
+            weight_info = "📊 **Weight Detected**: 60% Final + 40% CA"
         elif module_code in fifty_fifty:
             ca_weight, final_weight = 0.5, 0.5
+            weight_info = "📊 **Weight Detected**: 50% Final + 50% CA"
         else:
-            ca_weight = st.number_input("Enter CA Weight %", value=40) / 100
+            st.warning(f"⚠️ Module {module_code} not recognized. Please set custom CA weight:")
+            custom_weight = st.number_input(
+                "Enter CA Weight %", 
+                min_value=0, 
+                max_value=100, 
+                value=st.session_state.custom_ca_weight,
+                step=5,
+                key="ca_weight_input"
+            )
+            st.session_state.custom_ca_weight = custom_weight
+            ca_weight = custom_weight / 100
             final_weight = 1.0 - ca_weight
+            weight_info = f"📊 **Custom Weight**: {int(final_weight*100)}% Final + {int(ca_weight*100)}% CA"
+        
+        # Display weight information
+        st.info(weight_info)
 
         df["CA_Scaled"] = df["CAMarksPercent"] * ca_weight
         df["FinalGrade"] = df["CA_Scaled"]
