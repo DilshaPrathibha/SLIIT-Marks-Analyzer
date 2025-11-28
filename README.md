@@ -2,6 +2,10 @@
 
 A comprehensive student performance analysis tool designed specifically for SLIIT (Sri Lanka Institute of Information Technology) exam results. This application extracts student data from PDF exam reports and provides detailed insights into individual and class performance metrics.
 
+## 🔗 Live Application
+
+[👉 Visit the SLIIT Marks Analyzer](https://huggingface.co/spaces/Dilshaprathibha/sliitMarksAnalyzer)
+
 ## 🚀 Key Features
 
 ### 📊 Individual Student Analysis
@@ -20,6 +24,16 @@ A comprehensive student performance analysis tool designed specifically for SLII
 - **Detailed Student Reports**: Individual performance cards with key metrics
 - **Visual Analytics**: Charts and graphs for better data interpretation
 - **Summary Statistics**: Class averages, total students, and performance trends
+
+## 📸 Screenshots
+
+### Main Interface
+![Main Application Interface](images/Screenshot%201.png)
+*Upload PDF files and search for student performance with an intuitive interface*
+
+### Analytics Dashboard
+![Performance Analytics Dashboard](images/Screenshot%202.png)
+*Comprehensive performance analytics with charts, rankings, and detailed insights*
 
 ## 🛠️ Technology Stack
 
@@ -50,11 +64,19 @@ A comprehensive student performance analysis tool designed specifically for SLII
 - **Temporary File Handling**: Secure PDF processing without persistent storage
 - **Error Handling**: Robust validation and error messaging for invalid inputs
 
-## 🔗 Live Application
-
-[👉 Visit the SLIIT Marks Analyzer](https://huggingface.co/spaces/Dilshaprathibha/sliitMarksAnalyzer)
-
 ## 🚦 Getting Started
+
+## 📁 Project Structure
+
+```
+SLIIT-Marks-Analyzer/
+├── images/
+│   ├── Screenshot 1.png
+│   └── Screenshot 2.png
+├── app.py              # Main Streamlit application
+├── requirements.txt    # Python dependencies
+└── README.md          # Project documentation
+```
 
 ### Prerequisites
 - Python 3.7 or higher
@@ -85,6 +107,13 @@ streamlit run app.py
 3. **Student Search**: Enter your registration number to view individual performance
 4. **Analyze Results**: Review detailed performance metrics, rankings, and projections
 5. **Class Overview**: Explore comprehensive class performance analytics
+
+### Application Preview
+<div align="center">
+  <img src="images/Screenshot%202.png" alt="Student Performance Report" width="600">
+  <br>
+  <em>Example of detailed student performance report with rankings and grade projections</em>
+</div>
 
 ## ⚠️ Important Notes
 
