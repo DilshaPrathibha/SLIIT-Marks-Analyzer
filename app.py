@@ -11,10 +11,18 @@ st.set_page_config(page_title="📘 SLIIT Marks Analyzer", layout="wide")
 # 🔹 Apply outer frame and layout fix
 st.markdown("""
     <style>
+        /* Global dark theme */
+        :root, html, body, [data-testid="stAppViewContainer"] {
+            background-color: #0d1117 !important;
+            color: #e6edf3 !important;
+        }
+
         /* Limit max width & center all content */
         .main {
             padding-left: 300px !important;
             padding-right: 300px !important;
+            background-color: #0d1117 !important;
+            color: #e6edf3 !important;
         }
 
         /* Optional: Adjust spacing below inputs */
@@ -55,6 +63,16 @@ st.markdown("""
                 padding-right: 20px !important;
             }
         }
+
+        /* Tables on dark */
+        table, th, td {
+            color: #e6edf3 !important;
+            border-color: #30363d !important;
+        }
+
+        /* Links on dark */
+        a { color: #58a6ff !important; }
+        hr { border-color: #30363d !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -303,15 +321,16 @@ if uploaded_file:
         perf_counts = df_sorted["PerformanceClean"].value_counts().reindex(performance_order, fill_value=0)
 
         fig, axs = plt.subplots(2, 2, figsize=(16, 10))
-        fig.suptitle(f" Performance Overview - {module_name} ({module_code})", fontsize=18, weight='bold')
+        fig.patch.set_facecolor('#000000')
+        fig.suptitle(f" Performance Overview - {module_name} ({module_code})", fontsize=18, weight='bold', color='white')
 
         # Performance distribution
         axs[0, 0].bar(performance_order, perf_counts.values, color=["gold", "limegreen", "orange", "red"])
         axs[0, 0].set_title("Overall Performance", fontsize=14)
         axs[0, 0].set_ylabel("No. of Students")
         for i, val in enumerate(perf_counts.values):
-            axs[0, 0].text(i, val + 1, str(val), ha='center', fontsize=10)
-        axs[0, 0].grid(axis="y", linestyle="--", alpha=0.5)
+            axs[0, 0].text(i, val + 1, str(val), ha='center', fontsize=10, color='#e6edf3')
+        axs[0, 0].grid(axis="y", linestyle="--", alpha=0.2, color='white')
 
         # Grade Distribution
         custom_grade_order = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "E", "F", "N/A"]
@@ -321,22 +340,40 @@ if uploaded_file:
         axs[0, 1].set_xlabel("Grades")
         axs[0, 1].set_ylabel("Number of Students")
         axs[0, 1].tick_params(axis='x', rotation=45)
-        axs[0, 1].grid(axis="y", linestyle="--", alpha=0.5)
+        axs[0, 1].grid(axis="y", linestyle="--", alpha=0.2, color='white')
 
         # Status Breakdown
         status_counts = df_sorted["Status"].value_counts()
         colors = ["skyblue", "salmon", "orange"]
-        axs[1, 0].pie(status_counts.values, labels=status_counts.index,
-                      autopct='%1.1f%%', startangle=140, colors=colors,
-                      wedgeprops={'linewidth': 1, 'edgecolor': 'white'})
+        wedges, texts, autotexts = axs[1, 0].pie(
+            status_counts.values,
+            labels=status_counts.index,
+            autopct='%1.1f%%',
+            startangle=140,
+            colors=colors,
+            wedgeprops={'linewidth': 1, 'edgecolor': 'white'},
+            textprops={'color': '#e6edf3'}
+        )
+        for t in autotexts:
+            t.set_color('#e6edf3')
         axs[1, 0].set_title("Status Breakdown", fontsize=14)
 
         # Final Grade Distribution (CA Scaled)
-        axs[1, 1].hist(df_sorted["CA_Scaled"], bins=10, color="mediumpurple", edgecolor="black")
+        axs[1, 1].hist(df_sorted["CA_Scaled"], bins=10, color="mediumpurple", edgecolor="#e6edf3")
         axs[1, 1].set_title("Final Grade Distribution (CA Scaled)", fontsize=14)
         axs[1, 1].set_xlabel("Final Grade")
         axs[1, 1].set_ylabel("No. of Students")
-        axs[1, 1].grid(True, linestyle="--", alpha=0.5)
+        axs[1, 1].grid(True, linestyle="--", alpha=0.2, color='white')
+
+        # Apply dark styling to all axes
+        for ax in axs.flatten():
+            ax.set_facecolor('#0d1117')
+            ax.title.set_color('white')
+            ax.xaxis.label.set_color('white')
+            ax.yaxis.label.set_color('white')
+            ax.tick_params(colors='#e6edf3')
+            for spine in ax.spines.values():
+                spine.set_color('#30363d')
 
         fig.subplots_adjust(hspace=0.5)
         st.pyplot(fig)
@@ -425,15 +462,16 @@ if uploaded_file:
         perf_counts = df_sorted["Performance"].value_counts().reindex(performance_order, fill_value=0)
 
         fig, axs = plt.subplots(2, 2, figsize=(16, 10))
-        fig.suptitle(f" Performance Overview - {module_name} ({module_code})", fontsize=18, weight='bold')
+        fig.patch.set_facecolor('#000000')
+        fig.suptitle(f" Performance Overview - {module_name} ({module_code})", fontsize=18, weight='bold', color='white')
 
         # Performance distribution
         axs[0, 0].bar(performance_order, perf_counts.values, color=["gold", "limegreen", "orange", "red"])
         axs[0, 0].set_title("Performance Distribution", fontsize=14)
         axs[0, 0].set_ylabel("No. of Students")
         for i, val in enumerate(perf_counts.values):
-            axs[0, 0].text(i, val + 1, str(val), ha='center', fontsize=10)
-        axs[0, 0].grid(axis="y", linestyle="--", alpha=0.5)
+            axs[0, 0].text(i, val + 1, str(val), ha='center', fontsize=10, color='#e6edf3')
+        axs[0, 0].grid(axis="y", linestyle="--", alpha=0.2, color='white')
 
         # Grade Distribution
         custom_grade_order = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "E", "F"]
@@ -443,22 +481,40 @@ if uploaded_file:
         axs[0, 1].set_xlabel("Grades")
         axs[0, 1].set_ylabel("Number of Students")
         axs[0, 1].tick_params(axis='x', rotation=45)
-        axs[0, 1].grid(axis="y", linestyle="--", alpha=0.5)
+        axs[0, 1].grid(axis="y", linestyle="--", alpha=0.2, color='white')
 
         # Status Breakdown
         status_counts = df_sorted["Status"].value_counts()
         colors = ["skyblue", "salmon", "orange"]
-        axs[1, 0].pie(status_counts.values, labels=status_counts.index,
-                      autopct='%1.1f%%', startangle=140, colors=colors,
-                      wedgeprops={'linewidth': 1, 'edgecolor': 'white'})
+        wedges, texts, autotexts = axs[1, 0].pie(
+            status_counts.values,
+            labels=status_counts.index,
+            autopct='%1.1f%%',
+            startangle=140,
+            colors=colors,
+            wedgeprops={'linewidth': 1, 'edgecolor': 'white'},
+            textprops={'color': '#e6edf3'}
+        )
+        for t in autotexts:
+            t.set_color('#e6edf3')
         axs[1, 0].set_title("Status Breakdown", fontsize=14)
 
         # Estimated final mark distribution from grade
-        axs[1, 1].hist(df_sorted["ScoreApprox"], bins=10, color="mediumpurple", edgecolor="black")
+        axs[1, 1].hist(df_sorted["ScoreApprox"], bins=10, color="mediumpurple", edgecolor="#e6edf3")
         axs[1, 1].set_title("Estimated Final Mark Distribution (from Grade)", fontsize=14)
         axs[1, 1].set_xlabel("Estimated Total Mark")
         axs[1, 1].set_ylabel("No. of Students")
-        axs[1, 1].grid(True, linestyle="--", alpha=0.5)
+        axs[1, 1].grid(True, linestyle="--", alpha=0.2, color='white')
+
+        # Apply dark styling to all axes
+        for ax in axs.flatten():
+            ax.set_facecolor('#0d1117')
+            ax.title.set_color('white')
+            ax.xaxis.label.set_color('white')
+            ax.yaxis.label.set_color('white')
+            ax.tick_params(colors='#e6edf3')
+            for spine in ax.spines.values():
+                spine.set_color('#30363d')
 
         fig.subplots_adjust(hspace=0.5)
         st.pyplot(fig)
@@ -475,3 +531,13 @@ if uploaded_file:
         - ✅ Passed: <span style='color: green'>{num_pass}</span>  
         - ❌ Not Passed: <span style='color: green'>{num_fail}</span>  
         """, unsafe_allow_html=True)
+
+    # -------------------------------------------------------------
+    # Footer - Creator info
+    # -------------------------------------------------------------
+    st.markdown("---")
+    st.markdown(
+        "<div style='text-align:center; color:#6c757d;'>Created by <b>Dilsha Prathibha</b></div>",
+        unsafe_allow_html=True
+    )
+    st.markdown("---")
