@@ -102,8 +102,8 @@ if uploaded_file:
         df = pd.DataFrame(data, columns=["RegNo", "CAMarksPercent", "Grade", "Status"])
 
         # Module weight settings
-        sixty_forty = {"IT1010", "IT1050", "IT1090", "IT2020", "IT2060", "IT2050"}
-        fifty_fifty = {"IT1020", "IT1030", "IT1040", "IT1060", "IT1080", "IT1100", "IT2030", "IT2040"}
+        sixty_forty = {"IT1010", "IT1050", "IT1090", "IT2020", "IT2060", "IT2050", "IT2070", "IT2090"}
+        fifty_fifty = {"IT1020", "IT1030", "IT1040", "IT1060", "IT1080", "IT1100", "IT2030", "IT2040", "IT2010", "IT2110"}
 
         # Initialize session state for custom weight if not exists
         if 'custom_ca_weight' not in st.session_state:
