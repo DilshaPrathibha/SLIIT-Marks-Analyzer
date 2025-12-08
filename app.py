@@ -104,7 +104,7 @@ if uploaded_file:
     matches = re.findall(pattern_with_ca, text)
     has_ca_marks = True
 
-    # 🔹 Pattern 2: PDFs WITHOUT CA marks (like IT2080 final grades)
+    # 🔹 Pattern 2: PDFs WITHOUT CA marks
     if not matches:
         pattern_no_ca = (
             r"\b\d+\s+"
@@ -166,14 +166,20 @@ if uploaded_file:
 
     def performance_emoji(perf):
         return {
+            # old categories (grade-only branch)
             "Excellent": "🌟 Excellent",
             "High Performer": "✅ High Performer",
             "Average": "🟡 Average",
-            "Below Average": "🔻 Below Average"
+            "Below Average": "🔻 Below Average",
+            # new combined CA + Total categories
+            "Dual Star": "🌟 Dual Star (CA & Final Strong)",
+            "Exam Booster": "📘 Exam Booster (Final > CA)",
+            "CA Anchor": "🧩 CA Anchor (CA > Final)",
+            "Developing": "🔻 Developing (Needs Support)"
         }.get(perf, perf)
 
     # -------------------------------------------------------------
-    # Branch 1: PDFs WITH CA marks  (old behaviour preserved)
+    # Branch 1: PDFs WITH CA marks
     # -------------------------------------------------------------
     if has_ca_marks:
         # Module weight settings
@@ -210,14 +216,23 @@ if uploaded_file:
         df["CA_Scaled"] = df["CAMarksPercent"] * ca_weight
         df["FinalGrade"] = df["CA_Scaled"]
 
-        # Performance by raw CA marks
-        def performance_category(mark):
-            if mark >= 85: return "Excellent"
-            elif mark >= 70: return "High Performer"
-            elif mark >= 50: return "Average"
-            else: return "Below Average"
+        # 🔹 NEW: Performance uses BOTH CA and Total (from grade band midpoint)
+        grade_mid = {g: (lo + hi) / 2 for g, (lo, hi) in grade_ranges.items()}
 
-        df["Performance"] = df["CAMarksPercent"].apply(performance_category)
+        def performance_category_combined(row):
+            ca = row["CAMarksPercent"]
+            approx_total = grade_mid.get(row["Grade"], ca)
+
+            if ca >= 70 and approx_total >= 70:
+                return "Dual Star"          # strong CA and strong final
+            elif ca < 70 and approx_total >= 70:
+                return "Exam Booster"       # exam pulled the grade up
+            elif ca >= 70 and approx_total < 70:
+                return "CA Anchor"          # CA is strong, final weaker
+            else:
+                return "Developing"         # both sides need work
+
+        df["Performance"] = df.apply(performance_category_combined, axis=1)
 
         # Ranking
         df_sorted = df.sort_values(by="CA_Scaled", ascending=False).reset_index(drop=True)
@@ -241,7 +256,8 @@ if uploaded_file:
                 student = matches_student.iloc[0]
                 total = len(df_sorted)
                 rank = int(student["Rank"])
-                percentile = 100 * (1 - rank / total)
+                # show "Top X%" where X is small (better visual)
+                percentile = 100 * (rank / total)
                 avg = df_sorted["CA_Scaled"].mean()
                 ca_percent = student["CAMarksPercent"]
                 ca_scaled = ca_percent * ca_weight
@@ -267,12 +283,10 @@ if uploaded_file:
                         </thead>
                         <tbody>
                             <tr><td>🎓 RegNo</td><td>{student['RegNo']}</td></tr>
-                            <tr><td>🎯 Grade</td><td>{grade}</td></tr>
-                            <tr><td>🧾 Status</td><td>{status}</td></tr>
-                            <tr><td>📈 CA Marks (%)</td><td><span style='color: green;'>{ca_percent:.2f}</span></td></tr>
-                            <tr><td>🎯 Scaled CA</td><td><span style='color: green;'>{ca_scaled:.1f}</span> / {int(ca_weight * 100)}</td></tr>
-                            <tr><td>🎓 Rank</td><td><span style='color: green;'>{rank}</span> / {total}</td></tr>
-                            <tr><td>📊 Percentile</td><td>Top <span style='color: green;'>{percentile:.2f}%</span></td></tr>
+                            <tr><td>🎯 Grade / 🧾 Status</td><td>{grade} &nbsp;|&nbsp; {status}</td></tr>
+                            <tr><td>📈 CA Marks / 🎯 Scaled CA</td><td><span style='color: green;'>{ca_percent:.2f}%</span> &nbsp;|&nbsp; <span style='color: green;'>{ca_scaled:.1f}</span> / {int(ca_weight * 100)}</td></tr>
+                            <tr><td>🎓 Rank (Based on CA marks)</td><td><span style='color: green;'>{rank}</span> / {total}</td></tr>
+                            <tr><td>📊 Top Percentile (Based on CA)</td><td>Top <span style='color: green;'>{percentile:.2f}%</span></td></tr>
                             <tr><td>🧪 Final Exam Marks</td><td>Between <span style='color: green;'>{exam_min:.1f}</span> - <span style='color: green;'>{exam_max:.1f}</span></td></tr>
                             <tr><td>🎯 Total Mark</td><td>Between <span style='color: green;'>{min_total:.2f}</span> - <span style='color: green;'>{max_total:.2f}</span></td></tr>
                             <tr><td>📌 Performance</td><td>{perf}</td></tr>
@@ -284,7 +298,7 @@ if uploaded_file:
         st.markdown("---")
         st.subheader("📊 Performance Overview")
 
-        performance_order = ["Excellent", "High Performer", "Average", "Below Average"]
+        performance_order = ["Dual Star", "Exam Booster", "CA Anchor", "Developing"]
         df_sorted["PerformanceClean"] = df_sorted["Performance"]
         perf_counts = df_sorted["PerformanceClean"].value_counts().reindex(performance_order, fill_value=0)
 
@@ -293,7 +307,7 @@ if uploaded_file:
 
         # Performance distribution
         axs[0, 0].bar(performance_order, perf_counts.values, color=["gold", "limegreen", "orange", "red"])
-        axs[0, 0].set_title("Performance Distribution", fontsize=14)
+        axs[0, 0].set_title("Overall Performance", fontsize=14)
         axs[0, 0].set_ylabel("No. of Students")
         for i, val in enumerate(perf_counts.values):
             axs[0, 0].text(i, val + 1, str(val), ha='center', fontsize=10)
@@ -341,7 +355,7 @@ if uploaded_file:
         """, unsafe_allow_html=True)
 
     # -------------------------------------------------------------
-    # Branch 2: PDFs WITHOUT CA marks (grade-only, like IT2080)
+    # Branch 2: PDFs WITHOUT CA marks (grade-only)
     # -------------------------------------------------------------
     else:
         st.info("📊 This PDF does **not** contain CA marks. Analysis is based on final **grades only**.")
@@ -374,7 +388,7 @@ if uploaded_file:
                 student = matches_student.iloc[0]
                 total = len(df_sorted)
                 rank = int(student["Rank"])
-                percentile = 100 * (1 - rank / total)
+                percentile = 100 * (rank / total)
                 grade = student["Grade"]
                 status = student["Status"]
                 perf = performance_emoji(student["Performance"])
@@ -392,12 +406,11 @@ if uploaded_file:
                         </thead>
                         <tbody>
                             <tr><td>🎓 RegNo</td><td>{student['RegNo']}</td></tr>
-                            <tr><td>🎯 Grade</td><td>{grade}</td></tr>
-                            <tr><td>🧾 Status</td><td>{status}</td></tr>
+                            <tr><td>🎯 Grade / 🧾 Status</td><td>{grade} &nbsp;|&nbsp; {status}</td></tr>
                             <tr><td>📈 Estimated Total Mark</td><td><span style='color: green;'>{approx_score:.1f}</span> (from grade band)</td></tr>
                             <tr><td>🎯 Grade Band Range</td><td><span style='color: green;'>{min_total:.1f}</span> - <span style='color: green;'>{max_total:.1f}</span></td></tr>
                             <tr><td>🎓 Rank (by grade)</td><td><span style='color: green;'>{rank}</span> / {total}</td></tr>
-                            <tr><td>📊 Percentile</td><td>Top <span style='color: green;'>{percentile:.2f}%</span></td></tr>
+                            <tr><td>📊 Top Percentile</td><td>Top <span style='color: green;'>{percentile:.2f}%</span></td></tr>
                             <tr><td>📌 Performance</td><td>{perf}</td></tr>
                             <tr><td>ℹ️ Note</td><td>This module PDF does not show CA or exam breakdown — only final grades are available.</td></tr>
                         </tbody>
