@@ -15,7 +15,7 @@ A comprehensive student performance analysis tool designed specifically for SLII
 
 ## 🔗 Live Application
 
-[👉 Visit the SLIIT Marks Analyzer](https://huggingface.co/spaces/Dilshaprathibha/sliitMarksAnalyzer)
+[👉 Visit the SLIIT Marks Analyzer](https://dilshaprathibha-sliitmarksanalyzer.hf.space)
 
 ## 🚀 Key Features
 
