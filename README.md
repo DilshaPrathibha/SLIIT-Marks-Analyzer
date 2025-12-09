@@ -39,12 +39,18 @@ A comprehensive student performance analysis tool designed specifically for SLII
 ## 📸 Screenshots
 
 ### Main Interface
-![Main Application Interface](images/Screenshot%201.png)
-*Upload PDF files and search for student performance with an intuitive interface*
+<div align="center">
+	<img src="images/Screenshot%201.png" alt="Main Application Interface" style="max-width: 100%; height: auto;" />
+	<br>
+	<em>Upload PDF files and search for student performance with an intuitive interface</em>
+</div>
 
 ### Analytics Dashboard
-![Performance Analytics Dashboard](images/Screenshot%202.png)
-*Comprehensive performance analytics with charts, rankings, and detailed insights*
+<div align="center">
+	<img src="images/Screenshot%202.png" alt="Performance Analytics Dashboard" style="max-width: 100%; height: auto;" />
+	<br>
+	<em>Comprehensive performance analytics with charts, rankings, and detailed insights</em>
+</div>
 
 ## 🛠️ Technology Stack
 
@@ -74,8 +80,6 @@ A comprehensive student performance analysis tool designed specifically for SLII
 - **Client-Side Processing**: All calculations performed locally for data privacy
 - **Temporary File Handling**: Secure PDF processing without persistent storage
 - **Error Handling**: Robust validation and error messaging for invalid inputs
-
-## 🚦 Getting Started
 
 ## 📁 Project Structure
 
@@ -119,12 +123,7 @@ streamlit run app.py
 4. **Analyze Results**: Review detailed performance metrics, rankings, and projections
 5. **Class Overview**: Explore comprehensive class performance analytics
 
-### Application Preview
-<div align="center">
-  <img src="images/Screenshot%202.png" alt="Student Performance Report" width="600">
-  <br>
-  <em>Example of detailed student performance report with rankings and grade projections</em>
-</div>
+<!-- Application Preview section removed as requested -->
 
 ## ⚠️ Important Notes
 
