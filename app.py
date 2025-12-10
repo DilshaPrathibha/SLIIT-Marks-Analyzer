@@ -306,7 +306,7 @@ if uploaded_file:
                             <tr><td>🎓 Rank (Based on CA marks)</td><td><span style='color: green;'>{rank}</span> / {total}</td></tr>
                             <tr><td>📊 Top Percentile (Based on CA)</td><td>Top <span style='color: green;'>{percentile:.2f}%</span></td></tr>
                             <tr><td>🧪 Final Exam Marks</td><td>Between <span style='color: green;'>{exam_min:.1f}</span> - <span style='color: green;'>{exam_max:.1f}</span></td></tr>
-                            <tr><td>🎯 Total Mark</td><td>Between <span style='color: green;'>{min_total:.2f}</span> - <span style='color: green;'>{max_total:.2f}</span></td></tr>
+                            <tr><td>🎯 Total Marks</td><td>Between <span style='color: green;'>{min_total:.2f}</span> - <span style='color: green;'>{max_total:.2f}</span></td></tr>
                             <tr><td>📌 Performance</td><td>{perf}</td></tr>
                         </tbody>
                     </table>
@@ -360,7 +360,7 @@ if uploaded_file:
 
         # Final Grade Distribution (CA Scaled)
         axs[1, 1].hist(df_sorted["CA_Scaled"], bins=10, color="mediumpurple", edgecolor="#e6edf3")
-        axs[1, 1].set_title("Final Grade Distribution (CA Scaled)", fontsize=14)
+        axs[1, 1].set_title("CA Distribution", fontsize=14)
         axs[1, 1].set_xlabel("Final Grade")
         axs[1, 1].set_ylabel("No. of Students")
         axs[1, 1].grid(True, linestyle="--", alpha=0.2, color='white')
@@ -444,7 +444,7 @@ if uploaded_file:
                         <tbody>
                             <tr><td>🎓 RegNo</td><td>{student['RegNo']}</td></tr>
                             <tr><td>🎯 Grade / 🧾 Status</td><td>{grade} &nbsp;|&nbsp; {status}</td></tr>
-                            <tr><td>📈 Estimated Total Mark</td><td><span style='color: green;'>{approx_score:.1f}</span> (from grade band)</td></tr>
+                            <tr><td>📈 Estimated Total Marks</td><td><span style='color: green;'>{approx_score:.1f}</span> (from grade band)</td></tr>
                             <tr><td>🎯 Grade Band Range</td><td><span style='color: green;'>{min_total:.1f}</span> - <span style='color: green;'>{max_total:.1f}</span></td></tr>
                             <tr><td>🎓 Rank (by grade)</td><td><span style='color: green;'>{rank}</span> / {total}</td></tr>
                             <tr><td>📊 Top Percentile</td><td>Top <span style='color: green;'>{percentile:.2f}%</span></td></tr>
