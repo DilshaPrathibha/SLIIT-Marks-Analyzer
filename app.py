@@ -11,18 +11,10 @@ st.set_page_config(page_title="📘 SLIIT Marks Analyzer", layout="wide")
 # 🔹 Apply outer frame and layout fix
 st.markdown("""
     <style>
-        /* Global dark theme */
-        :root, html, body, [data-testid="stAppViewContainer"] {
-            background-color: #0d1117 !important;
-            color: #e6edf3 !important;
-        }
-
         /* Limit max width & center all content */
         .main {
             padding-left: 300px !important;
             padding-right: 300px !important;
-            background-color: #0d1117 !important;
-            color: #e6edf3 !important;
         }
 
         /* Optional: Adjust spacing below inputs */
@@ -63,16 +55,6 @@ st.markdown("""
                 padding-right: 20px !important;
             }
         }
-
-        /* Tables on dark */
-        table, th, td {
-            color: #e6edf3 !important;
-            border-color: #30363d !important;
-        }
-
-        /* Links on dark */
-        a { color: #58a6ff !important; }
-        hr { border-color: #30363d !important; }
     </style>
 """, unsafe_allow_html=True)
 
